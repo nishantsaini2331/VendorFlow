@@ -54,38 +54,38 @@ export async function PATCH(
   }
 }
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
-    const session = await getServerSession(authOptions);
-    const id = (await params).id;
+// export async function GET(
+//   req: NextRequest,
+//   { params }: { params: Promise<{ id: string }> }
+// ) {
+//   try {
+//     const session = await getServerSession(authOptions);
+//     const id = (await params).id;
 
-    if (!session) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+//     if (!session) {
+//       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+//     }
 
-    const vendor = await prisma.vendor.findFirst({
-      where: {
-        id,
-        userId: session.user.id,
-      },
-    });
+//     const vendor = await prisma.vendor.findFirst({
+//       where: {
+//         id,
+//         userId: session.user.id,
+//       },
+//     });
 
-    if (!vendor) {
-      return NextResponse.json({ error: "Vendor not found" }, { status: 404 });
-    }
+//     if (!vendor) {
+//       return NextResponse.json({ error: "Vendor not found" }, { status: 404 });
+//     }
 
-    return NextResponse.json(vendor);
-  } catch (error) {
-    console.error("Error fetching vendor:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch vendor" },
-      { status: 500 }
-    );
-  }
-}
+//     return NextResponse.json(vendor);
+//   } catch (error) {
+//     console.error("Error fetching vendor:", error);
+//     return NextResponse.json(
+//       { error: "Failed to fetch vendor" },
+//       { status: 500 }
+//     );
+//   }
+// }
 
 export async function DELETE(
   req: NextRequest,
