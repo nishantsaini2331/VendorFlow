@@ -1,26 +1,25 @@
-import { redirect, notFound } from 'next/navigation';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth';
-import { prisma } from '@/lib/db';
-import { VendorForm } from '@/components/vendors/vendor-form';
-import { Navbar } from '@/components/layout/navbar';
+import { redirect, notFound } from "next/navigation";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/lib/auth";
+import { prisma } from "@/lib/db";
+import { VendorForm } from "@/components/vendors/vendor-form";
+import { Navbar } from "@/components/layout/navbar";
 
-interface EditVendorPageProps {
-  params: {
-    id: string;
-  };
-}
-
-export default async function EditVendorPage({ params }: EditVendorPageProps) {
+export default async function EditVendorPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const session = await getServerSession(authOptions);
 
+  const id = (await params).id;
   if (!session) {
-    redirect('/login');
+    redirect("/login");
   }
 
   const vendor = await prisma.vendor.findFirst({
     where: {
-      id: params.id,
+      id,
       userId: session.user.id,
     },
   });
@@ -33,7 +32,10 @@ export default async function EditVendorPage({ params }: EditVendorPageProps) {
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
       <main className="flex-1 container mx-auto py-6">
-        <VendorForm initialData={JSON.parse(JSON.stringify(vendor))} isEditing />
+        <VendorForm
+          initialData={JSON.parse(JSON.stringify(vendor))}
+          isEditing
+        />
       </main>
     </div>
   );
